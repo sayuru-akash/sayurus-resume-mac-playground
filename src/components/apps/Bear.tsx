@@ -86,9 +86,7 @@ const Sidebar = ({ cur, setMidBar }: SidebarProps) => {
 
 const Middlebar = ({ items, cur, setContent }: MiddlebarProps) => {
   return (
-    <div
-      className="w-full h-full overflow-y-scroll bg-gray-50 dark:bg-gray-800 border-r border-gray-200/50 dark:border-gray-700/50"
-    >
+    <div className="w-full h-full overflow-y-scroll bg-gray-50 dark:bg-gray-800 border-r border-gray-200/50 dark:border-gray-700/50">
       <ul>
         {items.map((item: BearMdData, index: number) => (
           <li
@@ -118,9 +116,7 @@ const Middlebar = ({ items, cur, setContent }: MiddlebarProps) => {
                 )}
               </span>
             </div>
-            <div
-              className="h-16 ml-10 pb-2 pr-1 text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200/50 dark:border-gray-700/50"
-            >
+            <div className="h-16 ml-10 pb-2 pr-1 text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200/50 dark:border-gray-700/50">
               {item.excerpt}
             </div>
           </li>
