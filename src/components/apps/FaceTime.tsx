@@ -47,8 +47,15 @@ const FaceTime = () => {
         <Webcam
           className="border-8 border-white max-h-60 md:max-h-96"
           audio={false}
+          disablePictureInPicture={false}
+          forceScreenshotSourceSize={false}
+          imageSmoothing={true}
+          mirrored={false}
+          onUserMedia={() => undefined}
+          onUserMediaError={() => undefined}
           ref={webcamRef}
           screenshotFormat="image/jpeg"
+          screenshotQuality={0.92}
           videoConstraints={videoConstraints}
         />
         <button

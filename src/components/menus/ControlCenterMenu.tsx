@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import type { RefObject } from "react";
+import type { ReactElement, RefObject } from "react";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import {
@@ -27,7 +27,7 @@ import { MdWifi } from "react-icons/md";
 
 interface SliderProps {
   label: string;
-  icon: JSX.Element;
+  icon: ReactElement;
   value: number;
   setValue: (value: number) => void;
 }
@@ -36,9 +36,8 @@ const SliderComponent = ({ label, icon, value, setValue }: SliderProps) => {
   return (
     <div className="slider flex w-full">
       <div
-        className="h-7 p-2"
+        className="h-7 bg-gray-100 p-2 dark:bg-gray-800"
         border="t l b rounded-l-full gray-300 dark:gray-600"
-        bg="gray-100 dark:gray-800"
       >
         {icon}
       </div>
@@ -64,7 +63,7 @@ interface CCMProps {
   setBrightness: (value: number) => void;
   setVolume: (value: number) => void;
   playing: boolean;
-  btnRef: RefObject<HTMLDivElement>;
+  btnRef: RefObject<HTMLDivElement | null>;
 }
 
 export default function ControlCenterMenu({
@@ -76,28 +75,20 @@ export default function ControlCenterMenu({
   btnRef
 }: CCMProps) {
   const controlCenterRef = useRef<HTMLDivElement>(null);
-  const { dark, wifi, brightness, bluetooth, airdrop, fullscreen, volume } =
-    useAppSelector((state) => ({
-      dark: state.system.dark,
-      wifi: state.system.wifi,
-      brightness: state.system.brightness,
-      bluetooth: state.system.bluetooth,
-      airdrop: state.system.airdrop,
-      fullscreen: state.system.fullscreen,
-      volume: state.system.volume
-    }));
+  const dark = useAppSelector((state) => state.system.dark);
+  const wifi = useAppSelector((state) => state.system.wifi);
+  const brightness = useAppSelector((state) => state.system.brightness);
+  const bluetooth = useAppSelector((state) => state.system.bluetooth);
+  const airdrop = useAppSelector((state) => state.system.airdrop);
+  const fullscreen = useAppSelector((state) => state.system.fullscreen);
+  const volume = useAppSelector((state) => state.system.volume);
   const dispatch = useAppDispatch();
 
   useClickOutside(controlCenterRef, toggleControlCenter, [btnRef]);
 
   return (
     <div
-      className="fixed shadow-base w-80 h-96 max-w-full top-8 right-0 sm:right-2 p-2.5"
-      text="black dark:white"
-      bg="gray-100 opacity-70 dark:(gray-800 opacity-70)"
-      border="1 rounded-2xl gray-400 opacity-50 dark:(gray-500 opacity-50)"
-      display="grid"
-      grid="cols-4 rows-5 gap-2"
+      className="fixed top-8 right-0 grid h-96 w-80 max-w-full grid-cols-4 grid-rows-5 gap-2 rounded-2xl border border-gray-400/50 bg-gray-100/78 p-2.5 text-black shadow-base backdrop-blur-2xl sm:right-2 dark:border-gray-500/50 dark:bg-gray-800/78 dark:text-white"
       ref={controlCenterRef}
     >
       <div className="cc-grid row-span-2 col-span-2 p-2 flex flex-col justify-around">

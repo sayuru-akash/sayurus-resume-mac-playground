@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import type { RefObject } from "react";
-import format from "date-fns/format";
+import { format } from "date-fns";
 import { BiSearch } from "react-icons/bi";
 import { apps, launchpadApps } from "~/configs";
 import { useClickOutside } from "~/hooks";
@@ -28,7 +28,7 @@ interface SpotlightProps {
   toggleSpotlight: () => void;
   openApp: (id: string) => void;
   toggleLaunchpad: (target: boolean) => void;
-  btnRef: RefObject<HTMLDivElement>;
+  btnRef: RefObject<HTMLDivElement | null>;
 }
 
 export default function Spotlight({
@@ -47,7 +47,7 @@ export default function Spotlight({
   const [curDetails, setCurDetails] = useState<any>(null);
 
   const [appIdList, setAppIdList] = useState<string[]>([]);
-  const [appList, setAppList] = useState<JSX.Element | null>(null);
+  const [appList, setAppList] = useState<React.ReactElement | null>(null);
 
   const textWhite = "text-white dark:text-black";
   const textBlack = "text-black dark:text-white";
@@ -281,8 +281,7 @@ export default function Spotlight({
         </div>
         <input
           id="spotlight-input"
-          className="col-start-2 col-span-7 sm:col-span-10 bg-transparent no-outline px-1"
-          text="xl sm:2xl black dark:white"
+          className="col-start-2 col-span-7 bg-transparent px-1 text-xl text-black no-outline sm:col-span-10 sm:text-2xl dark:text-white"
           placeholder="Spotlight Search"
           value={searchText}
           onChange={handleInputChange}
@@ -297,10 +296,7 @@ export default function Spotlight({
           <div className="flex-grow">
             {curDetails && (
               <div className="h-full w-full flex flex-col">
-                <div
-                  className="mx-auto w-4/5 h-56 border-b menu-box-border"
-                  flex="none center col"
-                >
+                <div className="mx-auto h-56 w-4/5 flex-none flex flex-col items-center justify-center border-b menu-box-border">
                   <img
                     className="w-32 mx-auto"
                     src={curDetails.img}
@@ -315,21 +311,14 @@ export default function Spotlight({
                   </div>
                 </div>
                 <div className="flex-grow flex text-xs">
-                  <div
-                    className="w-1/2 items-end"
-                    flex="none center-h col"
-                    text="gray-500 dark:gray-400"
-                  >
+                  <div className="w-1/2 flex-none flex flex-col justify-center items-end text-gray-500 dark:text-gray-400">
                     <div>Kind</div>
                     <div>Size</div>
                     <div>Created</div>
                     <div>Modified</div>
                     <div>Last opened</div>
                   </div>
-                  <div
-                    className="pl-2 text-black dark:text-white"
-                    flex="grow center-h col"
-                  >
+                  <div className="pl-2 flex-grow flex flex-col justify-center text-black dark:text-white">
                     <div>
                       {curDetails.type === "app" ? "Application" : "Portfolio"}
                     </div>

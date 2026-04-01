@@ -9,7 +9,7 @@ interface AppleMenuProps {
   restart: (e: React.MouseEvent<HTMLLIElement>) => void;
   sleep: (e: React.MouseEvent<HTMLLIElement>) => void;
   toggleAppleMenu: () => void;
-  btnRef: RefObject<HTMLDivElement>;
+  btnRef: RefObject<HTMLDivElement | null>;
 }
 
 export default function AppleMenu({

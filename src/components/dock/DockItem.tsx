@@ -9,7 +9,7 @@ import { useWindowSize } from "~/hooks";
 
 const useDockHoverAnimation = (
   mouseX: MotionValue,
-  ref: RefObject<HTMLImageElement>,
+  ref: RefObject<HTMLImageElement | null>,
   dockSize: number,
   dockMag: number
 ) => {
@@ -99,10 +99,7 @@ export default function DockItem({
       onClick={desktop || id === "launchpad" ? () => openApp(id) : () => {}}
       className="flex-center-v flex-col justify-end mb-1 transition duration-150 ease-in origin-bottom"
     >
-      <p
-        className="tooltip absolute px-3 py-1 rounded-md text-sm"
-        bg="gray-300 opacity-80 dark:(gray-600 opacity-80)"
-      >
+      <p className="tooltip absolute px-3 py-1 rounded-md text-sm bg-gray-300 opacity-80 dark:bg-gray-600 dark:opacity-80">
         {title}
       </p>
       {link ? (

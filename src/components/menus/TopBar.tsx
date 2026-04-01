@@ -1,6 +1,6 @@
 import React, { forwardRef, useState, useEffect, useRef } from "react";
 import type { RefObject, ReactNode } from "react";
-import format from "date-fns/format";
+import { format } from "date-fns";
 
 import AppleMenu from "./AppleMenu";
 import WifiMenu from "./WifiMenu";
@@ -58,7 +58,7 @@ const CCMIcon = ({ size }: { size: number }) => {
 
 interface TopBarProps extends MacActions {
   title: string;
-  setSpotlightBtnRef: (value: RefObject<HTMLDivElement>) => void;
+  setSpotlightBtnRef: (value: RefObject<HTMLDivElement | null>) => void;
   hide: boolean;
   toggleSpotlight: () => void;
 }
@@ -83,17 +83,14 @@ const TopBar = (props: TopBarProps) => {
     showAppleMenu: false
   });
 
-  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   const [audio, audioState, controls, audioRef] = useAudio({
     src: music.audio,
     autoReplay: true
   });
   const { winWidth, winHeight } = useWindowSize();
 
-  const { volume, wifi } = useAppSelector((state) => ({
-    volume: state.system.volume,
-    wifi: state.system.wifi
-  }));
+  const volume = useAppSelector((state) => state.system.volume);
+  const wifi = useAppSelector((state) => state.system.wifi);
   const dispatch = useAppDispatch();
 
   useInterval(() => {

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { createRoot } from "react-dom/client";
+import type { Root } from "react-dom/client";
 import { Provider } from "react-redux";
 
 import { store } from "~/redux/store";
@@ -10,6 +11,12 @@ import Boot from "~/pages/Boot";
 import "@unocss/reset/tailwind.css";
 import "uno.css";
 import "~/styles/index.css";
+
+declare global {
+  interface Window {
+    __playgroundRoot?: Root;
+  }
+}
 
 export default function App() {
   const [login, setLogin] = useState<boolean>(false);
@@ -65,7 +72,9 @@ export default function App() {
 }
 
 const rootElement = document.getElementById("root") as HTMLElement;
-const root = createRoot(rootElement);
+const root = window.__playgroundRoot ?? createRoot(rootElement);
+
+window.__playgroundRoot = root;
 
 root.render(
   <Provider store={store}>

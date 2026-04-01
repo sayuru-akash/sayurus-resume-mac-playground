@@ -41,6 +41,7 @@ const ExitFullIcon = ({ size }: { size: number }) => {
 
 const minMarginY = 24;
 const minMarginX = 100;
+const windowStoragePrefix = "desktop-window:";
 
 interface TrafficProps {
   id: string;
@@ -68,6 +69,15 @@ interface WindowState {
   x: number;
   y: number;
 }
+
+const clamp = (value: number, min: number, max: number) => {
+  if (max < min) return min;
+  return Math.min(max, Math.max(min, value));
+};
+
+const hashWindowId = (id: string) => {
+  return id.split("").reduce((hash, char) => hash + char.charCodeAt(0), 0);
+};
 
 const TrafficLights = ({ id, close, max, setMax, setMin }: TrafficProps) => {
   const closeWindow = (e: React.MouseEvent | React.TouchEvent): void => {
@@ -113,23 +123,91 @@ const Window = (props: WindowProps) => {
 
   const initWidth = Math.min(winWidth, props.width ? props.width : 640);
   const initHeight = Math.min(winHeight, props.height ? props.height : 400);
+  const minWidth = props.minWidth ? props.minWidth : 200;
+  const minHeight = props.minHeight ? props.minHeight : 150;
 
-  const [state, setState] = useState<WindowState>({
-    width: initWidth,
-    height: initHeight,
-    // "+ winWidth" because of the boundary for windows
-    x: winWidth + Math.random() * (winWidth - initWidth),
-    // "- minMarginY" because of the boundary for windows
-    y: Math.random() * (winHeight - initHeight - minMarginY)
-  });
+  const normalizeState = (nextState: WindowState): WindowState => {
+    const width = Math.min(winWidth, Math.max(minWidth, nextState.width));
+    const height = Math.min(winHeight, Math.max(minHeight, nextState.height));
+    const minX = winWidth - width + minMarginX;
+    const maxX = winWidth * 2 - minMarginX;
+    const maxY = Math.max(
+      0,
+      winHeight - minMarginY - ((dockSize as number) + 15 + minMarginY)
+    );
+
+    return {
+      width,
+      height,
+      x: clamp(nextState.x, minX, maxX),
+      y: clamp(nextState.y, 0, maxY)
+    };
+  };
+
+  const getDefaultState = (): WindowState => {
+    const cascadeIndex = hashWindowId(props.id) % 5;
+    const visibleMaxX = Math.max(0, winWidth - initWidth);
+    const visibleMaxY = Math.max(
+      0,
+      winHeight - initHeight - ((dockSize as number) + 15 + minMarginY)
+    );
+    const visibleX = clamp(
+      Math.floor((winWidth - initWidth) / 2) + cascadeIndex * 28 - 56,
+      0,
+      visibleMaxX
+    );
+    const visibleY = clamp(56 + cascadeIndex * 24, 0, visibleMaxY);
+
+    return normalizeState({
+      width: initWidth,
+      height: initHeight,
+      x: winWidth + visibleX,
+      y: visibleY
+    });
+  };
+
+  const getStoredState = (): WindowState => {
+    const fallbackState = getDefaultState();
+
+    try {
+      const rawState = window.localStorage.getItem(
+        `${windowStoragePrefix}${props.id}`
+      );
+      if (rawState === null) return fallbackState;
+
+      const parsedState = JSON.parse(rawState) as Partial<WindowState>;
+      if (
+        typeof parsedState.width !== "number" ||
+        typeof parsedState.height !== "number" ||
+        typeof parsedState.x !== "number" ||
+        typeof parsedState.y !== "number"
+      ) {
+        return fallbackState;
+      }
+
+      return normalizeState({
+        width: parsedState.width,
+        height: parsedState.height,
+        x: parsedState.x,
+        y: parsedState.y
+      });
+    } catch {
+      return fallbackState;
+    }
+  };
+
+  const [state, setState] = useState<WindowState>(() => getStoredState());
 
   useEffect(() => {
-    setState({
-      ...state,
-      width: Math.min(winWidth, state.width),
-      height: Math.min(winHeight, state.height)
-    });
-  }, [winWidth, winHeight]);
+    setState((prevState) => normalizeState(prevState));
+  }, [dockSize, winHeight, winWidth]);
+
+  useEffect(() => {
+    window.localStorage.setItem(
+      `${windowStoragePrefix}${props.id}`,
+      JSON.stringify(state)
+    );
+  }, [props.id, state]);
 
   const round = props.max ? "rounded-none" : "rounded-lg";
   const minimized = props.min
@@ -172,18 +250,22 @@ const Window = (props: WindowProps) => {
             )
       }}
       onDragStop={(e, d) => {
-        setState({ ...state, x: d.x, y: d.y });
+        setState((prevState) =>
+          normalizeState({ ...prevState, x: d.x, y: d.y })
+        );
       }}
       onResizeStop={(e, direction, ref, delta, position) => {
-        setState({
-          ...state,
-          width: parseInt(ref.style.width),
-          height: parseInt(ref.style.height),
-          ...position
-        });
+        setState((prevState) =>
+          normalizeState({
+            ...prevState,
+            width: parseInt(ref.style.width, 10),
+            height: parseInt(ref.style.height, 10),
+            ...position
+          })
+        );
       }}
-      minWidth={props.minWidth ? props.minWidth : 200}
-      minHeight={props.minHeight ? props.minHeight : 150}
+      minWidth={minWidth}
+      minHeight={minHeight}
       dragHandleClassName="window-bar"
       disableDragging={props.max}
       enableResizing={!props.max}

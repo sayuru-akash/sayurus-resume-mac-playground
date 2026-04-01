@@ -87,8 +87,7 @@ const Sidebar = ({ cur, setMidBar }: SidebarProps) => {
 const Middlebar = ({ items, cur, setContent }: MiddlebarProps) => {
   return (
     <div
-      className="w-full h-full overflow-y-scroll"
-      bg="gray-50 dark:gray-800"
+      className="w-full h-full overflow-y-scroll bg-gray-50 dark:bg-gray-800"
       border="r gray-300 dark:(gray-600)"
     >
       <ul>
@@ -121,9 +120,8 @@ const Middlebar = ({ items, cur, setContent }: MiddlebarProps) => {
               </span>
             </div>
             <div
-              className="h-16 ml-10 pb-2 pr-1"
+              className="h-16 ml-10 pb-2 pr-1 text-sm text-gray-500 dark:text-gray-400"
               border="b gray-300 dark:gray-600"
-              text="sm gray-500 dark:gray-400"
             >
               {item.excerpt}
             </div>
@@ -187,9 +185,13 @@ const Content = ({ contentID, contentURL }: ContentProps) => {
     <div className="markdown w-full h-full bg-gray-50 text-gray-700 dark:(bg-gray-800 text-gray-200) overflow-scroll py-6">
       <div className="w-2/3 px-2 mx-auto">
         <ReactMarkdown
-          linkTarget="_blank"
           remarkPlugins={[gfm]}
-          components={Highlighter(dark as boolean)}
+          components={{
+            a: ({ ...props }) => (
+              <a {...props} target="_blank" rel="noreferrer" />
+            ),
+            ...Highlighter(dark as boolean)
+          }}
         >
           {storeMd[contentID]}
         </ReactMarkdown>

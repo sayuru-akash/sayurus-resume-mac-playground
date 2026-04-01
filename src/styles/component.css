@@ -84,19 +84,28 @@ html.dark .spotlight .spotlight-type {
 /* --------- slider --------- */
 
 .slider .cc-range-slider {
-  @apply w-full h-7 m-0 rounded-r-full border-t border-r border-b border-transparent;
+  @apply relative flex w-full h-7 m-0 items-center rounded-r-full border-t border-r border-b border-transparent;
+  padding: 0;
+}
+
+.slider .cc-range-slider .rc-slider-rail,
+.slider .cc-range-slider .rc-slider-track,
+.slider .cc-range-slider .rc-slider-step {
+  top: 0;
+  height: 100%;
 }
 
 .slider .cc-range-slider .rc-slider-rail {
-  @apply bg-gray-300 h-7 rounded-r-full;
+  @apply bg-gray-300 rounded-r-full;
 }
 
 .slider .cc-range-slider .rc-slider-track {
-  @apply bg-gray-100 h-7 rounded-none shadow-none;
+  @apply bg-gray-100 rounded-none shadow-none;
 }
 
 .slider .cc-range-slider .rc-slider-handle {
   @apply border border-gray-300 outline-none h-7 w-7 bg-white;
+  top: 0;
   margin-top: 0;
   opacity: 1;
   box-shadow: -3px 0px 8px 0px rgba(17, 17, 17, 0.15);

@@ -20,10 +20,8 @@ export default function Dock({
   toggleLaunchpad,
   hide
 }: DockProps) {
-  const { dockSize, dockMag } = useAppSelector((state) => ({
-    dockSize: state.dock.size,
-    dockMag: state.dock.mag
-  }));
+  const dockSize = useAppSelector((state) => state.dock.size);
+  const dockMag = useAppSelector((state) => state.dock.mag);
 
   const openApp = (id: string) => {
     if (id === "launchpad") toggleLaunchpad(!showLaunchpad);
@@ -42,9 +40,7 @@ export default function Dock({
       } overflow-x-scroll sm:overflow-x-visible`}
     >
       <ul
-        className="mx-auto w-max px-2 space-x-2 flex backdrop-blur-2xl"
-        bg="white opacity-20 dark:(black opacity-20)"
-        border="t l r rounded-none sm:rounded-t-lg gray-400 opacity-30 dark:(gray-500 opacity-30)"
+        className="mx-auto flex w-max space-x-2 rounded-none border border-b-0 border-gray-400/30 bg-white/20 px-2 backdrop-blur-2xl sm:rounded-t-lg dark:border-gray-500/30 dark:bg-black/20"
         onMouseMove={(e) => mouseX.set(e.nativeEvent.x)}
         onMouseLeave={() => mouseX.set(null)}
         style={{

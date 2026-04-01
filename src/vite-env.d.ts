@@ -1,7 +1,9 @@
 /// <reference types="vite/client" />
 
-import type { AttributifyAttributes } from "unocss/dist/preset-attributify";
+import "react";
 
 declare module "react" {
-  interface HTMLAttributes<T> extends AttributifyAttributes {}
+  interface HTMLAttributes<T> {
+    [key: string]: unknown;
+  }
 }

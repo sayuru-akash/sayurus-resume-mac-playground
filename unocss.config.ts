@@ -2,6 +2,7 @@ import {
   defineConfig,
   presetAttributify,
   presetUno,
+  transformerAttributifyJsx,
   transformerDirectives,
   transformerVariantGroup
 } from "unocss";
@@ -56,5 +57,9 @@ export default defineConfig({
     ["leading-cc", { "line-height": "0.9rem" }]
   ],
   presets: [presetUno(), presetAttributify()],
-  transformers: [transformerDirectives(), transformerVariantGroup()]
+  transformers: [
+    transformerAttributifyJsx(),
+    transformerDirectives(),
+    transformerVariantGroup()
+  ]
 });

@@ -31,7 +31,7 @@ const NavSection = ({ width, section, setGoURL }: NavSectionProps) => {
 
   return (
     <div className="mx-auto pt-8 w-full max-w-screen-md px-4">
-      <div className="font-medium ml-2" text="xl sm:2xl">
+      <div className="font-medium ml-2 text-xl sm:text-2xl">
         {section.title}
       </div>
       <div className={`mt-3 grid grid-flow-row ${grid}`}>
@@ -63,13 +63,11 @@ const NavSection = ({ width, section, setGoURL }: NavSectionProps) => {
                         : () => window.open(site.link)
                     }
                   >
-                    <span text="lg center">{site.title}</span>
+                    <span className="text-center text-lg">{site.title}</span>
                   </div>
                 )}
               </div>
-              <span m="t-2 x-auto" text="sm">
-                {site.title}
-              </span>
+              <span className="mt-2 mx-auto text-sm">{site.title}</span>
             </div>
           </div>
         ))}
@@ -93,10 +91,7 @@ const NavPage = ({ width, setGoURL }: NavProps) => {
         backgroundImage: `url(${dark ? wallpapers.night : wallpapers.day})`
       }}
     >
-      <div
-        className="w-full min-h-full pt-8 backdrop-blur-2xl"
-        bg="gray-100 opacity-80 dark:(gray-800 opacity-80)"
-      >
+      <div className="w-full min-h-full bg-gray-100/80 pt-8 backdrop-blur-2xl dark:bg-gray-800/80">
         {/* Favorites */}
         <NavSection
           section={websites.favorites}
@@ -108,13 +103,10 @@ const NavPage = ({ width, setGoURL }: NavProps) => {
         <NavSection section={websites.freq} setGoURL={setGoURL} width={width} />
 
         {/* Privacy Report */}
-        <div className="mx-auto w-full max-w-screen-md" p="t-8 b-16 x-6">
-          <div font="medium" text="xl sm:2xl">
-            Privacy Report
-          </div>
+        <div className="mx-auto w-full max-w-screen-md pt-8 pb-16 px-6">
+          <div className="text-xl font-medium sm:text-2xl">Privacy Report</div>
           <div
-            className={`h-16 w-full mt-4 grid ${grid} shadow-md rounded-xl text-sm`}
-            bg="gray-50 opacity-70 dark:(gray-900 opacity-70)"
+            className={`mt-4 grid h-16 w-full ${grid} rounded-xl bg-gray-50/78 text-sm shadow-md dark:bg-gray-900/78`}
           >
             <div className="col-start-1 col-span-1 flex-center space-x-2">
               <FaShieldAlt size={24} />
@@ -141,11 +133,7 @@ const NoInternetPage = () => {
         backgroundImage: `url(${dark ? wallpapers.night : wallpapers.day})`
       }}
     >
-      <div
-        className="w-full h-full pb-10 bg-opacity-80 backdrop-blur-2xl flex-center"
-        text="center gray-600 dark:gray-500"
-        bg="gray-100 dark:gray-800"
-      >
+      <div className="flex-center h-full w-full bg-gray-100/80 pb-10 text-center text-gray-600 backdrop-blur-2xl dark:bg-gray-800/80 dark:text-gray-500">
         <div className="pb-10 text-center">
           <div className="text-2xl font-bold">
             You Are Not Connected to the Internet
@@ -209,18 +197,15 @@ const Safari = ({ width }: SafariProps) => {
           >
             <FiChevronLeft size={20} />
           </button>
-          <button className="safari-btn w-7" text="gray-400 dark:gray-500">
+          <button className="safari-btn w-7 text-gray-400 dark:text-gray-500">
             <FiChevronRight size={20} />
           </button>
-          <button className="safari-btn w-9 ml-3" text="gray-700 dark:gray-200">
+          <button className="safari-btn w-9 ml-3 text-gray-700 dark:text-gray-200">
             <BsLayoutSidebar size={14} />
           </button>
         </div>
         <div className="flex-center-h space-x-2 px-2">
-          <button
-            className="safari-btn w-9 -ml-10"
-            text="gray-400 dark:gray-500"
-          >
+          <button className="safari-btn w-9 -ml-10 text-gray-400 dark:text-gray-500">
             <FaShieldAlt size={14} />
           </button>
           <input
@@ -228,9 +213,7 @@ const Safari = ({ width }: SafariProps) => {
             value={state.currentURL}
             onChange={(e) => setState({ ...state, currentURL: e.target.value })}
             onKeyPress={pressURL}
-            className="h-6 w-full p-2 rounded font-normal no-outline"
-            bg="gray-200 dark:gray-700"
-            text="sm center gray-500 dark:gray-400"
+            className="h-6 w-full rounded bg-gray-200 p-2 text-center text-sm text-gray-500 font-normal no-outline dark:bg-gray-700 dark:text-gray-400"
             border="2 transparent focus:blue-400 dark:focus:blue-500"
             placeholder="Search or enter website name"
           />
@@ -239,7 +222,7 @@ const Safari = ({ width }: SafariProps) => {
           <button className={`safari-btn w-9 ${buttonColor}`}>
             <IoShareOutline size={16} />
           </button>
-          <button className="safari-btn w-9" text="gray-700 dark:gray-200">
+          <button className="safari-btn w-9 text-gray-700 dark:text-gray-200">
             <IoCopyOutline size={16} />
           </button>
         </div>

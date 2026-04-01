@@ -45,10 +45,7 @@ export default function Boot({ restart, sleep, setBooting }: BootProps) {
     >
       <FaApple className="text-white -mt-4 w-20 h-20 sm:w-24 sm:h-24" />
       {loading && (
-        <div
-          className="absolute top-1/2 left-0 right-0 w-56 h-1 sm:h-1.5 bg-gray-500 rounded overflow-hidden"
-          m="t-16 sm:t-24 x-auto"
-        >
+        <div className="absolute top-1/2 left-0 right-0 w-56 h-1 mt-16 mx-auto overflow-hidden rounded bg-gray-500 sm:h-1.5 sm:mt-24">
           <span
             className="absolute top-0 bg-white h-full rounded-sm"
             style={{
@@ -58,11 +55,7 @@ export default function Boot({ restart, sleep, setBooting }: BootProps) {
         </div>
       )}
       {!restart && !loading && (
-        <div
-          className="absolute top-1/2 left-0 right-0"
-          m="t-16 sm:t-20 x-auto"
-          text="sm gray-200 center"
-        >
+        <div className="absolute top-1/2 left-0 right-0 mt-16 mx-auto text-center text-sm text-gray-200 sm:mt-20">
           Click to {sleep ? "wake up" : "boot"}
         </div>
       )}

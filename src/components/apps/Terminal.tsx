@@ -24,7 +24,7 @@ interface HowDareProps {
 
 interface TerminalState {
   rmrf: boolean;
-  content: JSX.Element[];
+  content: React.ReactElement[];
 }
 
 // rain animation is adopted from: https://codepen.io/P3R0/pen/MwgoKv
@@ -139,7 +139,7 @@ export default class Terminal extends Component<{}, TerminalState> {
     terminal.innerHTML = "";
   };
 
-  addRow = (row: JSX.Element) => {
+  addRow = (row: React.ReactElement) => {
     if (this.state.content.find((item) => item.key === row.key)) return;
 
     const content = this.state.content;
@@ -386,7 +386,7 @@ export default class Terminal extends Component<{}, TerminalState> {
     this.addRow(newRow);
   };
 
-  generateResultRow = (id: number, result: JSX.Element) => {
+  generateResultRow = (id: number, result: React.ReactElement) => {
     const newRow = (
       <div
         key={`terminal-result-row-${id}`}
@@ -401,9 +401,7 @@ export default class Terminal extends Component<{}, TerminalState> {
   render() {
     return (
       <div
-        className="terminal font-terminal font-normal relative w-full h-full overflow-y-scroll"
-        bg="gray-800 opacity-90"
-        text="white sm"
+        className="terminal font-terminal font-normal relative w-full h-full overflow-y-scroll bg-gray-800 opacity-90 text-sm text-white"
         onClick={() => this.focusOnInput(this.curInputTimes)}
       >
         {this.state.rmrf && (

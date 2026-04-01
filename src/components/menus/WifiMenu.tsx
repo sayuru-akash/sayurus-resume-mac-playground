@@ -6,7 +6,7 @@ import { useClickOutside } from "~/hooks";
 
 interface WifiMenuProps {
   toggleWifiMenu: () => void;
-  btnRef: RefObject<HTMLDivElement>;
+  btnRef: RefObject<HTMLDivElement | null>;
 }
 
 export default function WifiMenu({ toggleWifiMenu, btnRef }: WifiMenuProps) {

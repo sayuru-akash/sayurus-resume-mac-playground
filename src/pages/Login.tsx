@@ -51,10 +51,7 @@ export default function Login(props: MacActions) {
         <div className="font-semibold mt-2 text-xl text-white">{user.name}</div>
 
         {/* Password Input */}
-        <div
-          className="mx-auto grid grid-cols-5 w-44 h-8 mt-4 rounded-md backdrop-blur-2xl"
-          bg="gray-300 opacity-50"
-        >
+        <div className="mx-auto mt-4 grid h-8 w-44 grid-cols-5 rounded-md bg-gray-300/50 backdrop-blur-2xl">
           <input
             className="text-sm text-white col-start-1 col-span-4 no-outline bg-transparent px-2"
             type="password"

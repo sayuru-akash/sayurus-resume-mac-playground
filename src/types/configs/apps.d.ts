@@ -1,3 +1,5 @@
+import type { ReactElement } from "react";
+
 export interface AppsData {
   id: string;
   title: string;
@@ -8,6 +10,6 @@ export interface AppsData {
   height?: number;
   minWidth?: number;
   minHeight?: number;
-  content?: JSX.Element;
+  content?: ReactElement;
   link?: string;
 }
