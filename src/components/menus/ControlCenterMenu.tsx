@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import type { RefObject } from "react";
-import Slider from "react-rangeslider";
-import "react-rangeslider/lib/index.css";
+import Slider from "rc-slider";
+import "rc-slider/assets/index.css";
 import {
   toggleDark,
   toggleWIFI,
@@ -26,12 +26,13 @@ import { IoSunny, IoMoon, IoVolumeHigh } from "react-icons/io5";
 import { MdWifi } from "react-icons/md";
 
 interface SliderProps {
+  label: string;
   icon: JSX.Element;
   value: number;
   setValue: (value: number) => void;
 }
 
-const SliderComponent = ({ icon, value, setValue }: SliderProps) => {
+const SliderComponent = ({ label, icon, value, setValue }: SliderProps) => {
   return (
     <div className="slider flex w-full">
       <div
@@ -42,12 +43,16 @@ const SliderComponent = ({ icon, value, setValue }: SliderProps) => {
         {icon}
       </div>
       <Slider
+        ariaLabelForHandle={label}
+        className="cc-range-slider"
         min={1}
         max={100}
         value={value}
-        tooltip={false}
-        orientation="horizontal"
-        onChange={(v: number) => setValue(v)}
+        onChange={(nextValue) => {
+          if (typeof nextValue === "number") {
+            setValue(nextValue);
+          }
+        }}
       />
     </div>
   );
@@ -170,6 +175,7 @@ export default function ControlCenterMenu({
       <div className="cc-grid col-span-4 px-2.5 py-2 space-y-1 flex flex-col justify-around">
         <span className="font-medium ml-0.5">Display</span>
         <SliderComponent
+          label="Display brightness"
           icon={
             <IoSunny size={12} className="text-gray-500 dark:text-gray-400" />
           }
@@ -180,6 +186,7 @@ export default function ControlCenterMenu({
       <div className="cc-grid col-span-4 px-2.5 py-2 space-y-1 flex flex-col justify-around">
         <span className="font-medium ml-0.5">Sound</span>
         <SliderComponent
+          label="Sound volume"
           icon={
             <IoVolumeHigh
               size={12}
