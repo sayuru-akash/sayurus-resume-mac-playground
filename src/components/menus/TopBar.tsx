@@ -28,8 +28,8 @@ interface TopBarItemProps {
 const TopBarItem = forwardRef((props: TopBarItemProps, ref: any) => {
   const hide = props.hideOnMobile ? "hidden sm:inline-flex" : "inline-flex";
   const hover = props.forceHover
-    ? "bg-white bg-opacity-30 dark:(bg-black bg-opacity-30)"
-    : "rounded hover:bg-white hover:bg-opacity-30 dark:(hover:bg-black hover:bg-opacity-30)";
+    ? "bg-white/25 dark:bg-black/25"
+    : "rounded-md hover:bg-white/20 dark:hover:bg-black/20 transition-colors duration-150";
   return (
     <div
       ref={ref}
@@ -164,7 +164,7 @@ const TopBar = (props: TopBarProps) => {
     <div
       className={`w-full h-6 px-4 fixed top-0 flex-center-v justify-between ${
         props.hide ? "z-0" : "z-20"
-      } text-sm text-white bg-gray-500 bg-opacity-10 backdrop-blur-2xl shadow transition`}
+      } text-sm text-white bg-gray-500/5 backdrop-blur-3xl shadow-sm transition`}
     >
       <div className="flex-center-v space-x-4">
         <TopBarItem

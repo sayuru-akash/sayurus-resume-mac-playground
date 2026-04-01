@@ -289,14 +289,14 @@ export default function Spotlight({
         />
       </div>
       {searchText !== "" && (
-        <div className="h-spotlight bg-transparent flex flex-row border-t menu-box-border">
-          <div className="flex-none w-32 sm:w-72 border-r menu-box-border overflow-y-scroll">
+        <div className="h-spotlight bg-transparent flex flex-row border-t border-gray-300/30 dark:border-gray-700/30">
+          <div className="flex-none w-32 sm:w-72 border-r border-gray-300/30 dark:border-gray-700/30 overflow-y-scroll">
             {appList}
           </div>
           <div className="flex-grow">
             {curDetails && (
               <div className="h-full w-full flex flex-col">
-                <div className="mx-auto h-56 w-4/5 flex-none flex flex-col items-center justify-center border-b menu-box-border">
+                <div className="mx-auto h-56 w-4/5 flex-none flex flex-col items-center justify-center border-b border-gray-300/30 dark:border-gray-700/30">
                   <img
                     className="w-32 mx-auto"
                     src={curDetails.img}

@@ -401,7 +401,7 @@ export default class Terminal extends Component<{}, TerminalState> {
   render() {
     return (
       <div
-        className="terminal font-terminal font-normal relative w-full h-full overflow-y-scroll bg-gray-800 opacity-90 text-sm text-white"
+        className="terminal font-terminal font-normal relative w-full h-full overflow-y-scroll bg-gray-900 text-sm text-white"
         onClick={() => this.focusOnInput(this.curInputTimes)}
       >
         {this.state.rmrf && (

@@ -209,11 +209,13 @@ const Window = (props: WindowProps) => {
     );
   }, [props.id, state]);
 
-  const round = props.max ? "rounded-none" : "rounded-lg";
+  const round = props.max ? "rounded-none" : "rounded-xl";
   const minimized = props.min
     ? "opacity-0 invisible transition-opacity duration-300"
     : "";
-  const border = props.max ? "" : "border border-gray-500 border-opacity-30";
+  const border = props.max
+    ? ""
+    : "border border-gray-400/20 dark:border-gray-600/20";
   const width = props.max ? winWidth : state.width;
   const height = props.max ? winHeight : state.height;
 
@@ -271,11 +273,11 @@ const Window = (props: WindowProps) => {
       enableResizing={!props.max}
       style={{ zIndex: props.z }}
       onMouseDown={() => props.focus(props.id)}
-      className={`absolute ${round} overflow-hidden bg-transparent w-full h-full ${border} shadow-md ${minimized}`}
+      className={`absolute ${round} overflow-hidden bg-transparent w-full h-full ${border} shadow-lg ${minimized}`}
       id={`window-${props.id}`}
     >
       <div
-        className="window-bar relative h-6 text-center bg-gray-200 dark:bg-gray-700"
+        className="window-bar relative h-6 text-center bg-gray-100/80 backdrop-blur-sm dark:bg-gray-800/80 dark:backdrop-blur-sm"
         onDoubleClick={() => props.setMax(props.id)}
       >
         <TrafficLights
