@@ -1,5 +1,114 @@
+# Logs
+logs
 *.log
-.DS_Store
-.cache/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Dependency directories
 node_modules/
+.pnpm-store/
+
+# Build outputs
 dist/
+build/
+out/
+.out/
+.parcel-cache/
+.vite/
+.next/
+.nuxt/
+.vercel/
+.serverless/
+
+# Cache
+.cache/
+/.turbo/
+/.parcel-cache/
+
+# Coverage reports
+coverage/
+coverage-final.json
+lcov-report/
+*.lcov
+nyc_output/
+
+# TypeScript
+*.tsbuildinfo
+
+# Env files
+.env
+.env.*
+!.env.example
+
+# OS files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Icon?
+
+# Editor directories and files
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# JetBrains
+/.idea/
+*.iml
+
+# Vim
+.*.swp
+*.swp
+*.swo
+
+# Emacs
+*~
+.#*
+
+# Mac-specific
+.Spotlight-V100
+.Trashes
+
+# Certificates and keys
+*.pem
+*.key
+*.crt
+
+# OS generated files
+desktop.ini
+Thumbs.db
+
+# Temporary files
+tmp/
+temp/
+~tmp/
+
+# Archives
+*.tgz
+*.zip
+*.tar.gz
+
+# Package managers
+# (Do not ignore lockfiles - keep them committed)
+# yarn.lock
+# package-lock.json
+# pnpm-lock.yaml
+
+# Storybook
+.outstorybook
+
+# Test coverage and reports
+.jest/
+.nyc_output/
+
+# Misc
+/.DS_Store
+
