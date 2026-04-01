@@ -91,7 +91,7 @@ const NavPage = ({ width, setGoURL }: NavProps) => {
         backgroundImage: `url(${dark ? wallpapers.night : wallpapers.day})`
       }}
     >
-      <div className="w-full min-h-full bg-gray-100/80 pt-8 backdrop-blur-2xl dark:bg-gray-800/80">
+      <div className="w-full min-h-full bg-gray-100/85 pt-8 backdrop-blur-3xl dark:bg-gray-800/85">
         {/* Favorites */}
         <NavSection
           section={websites.favorites}
@@ -106,7 +106,7 @@ const NavPage = ({ width, setGoURL }: NavProps) => {
         <div className="mx-auto w-full max-w-screen-md pt-8 pb-16 px-6">
           <div className="text-xl font-medium sm:text-2xl">Privacy Report</div>
           <div
-            className={`mt-4 grid h-16 w-full ${grid} rounded-xl bg-gray-50/78 text-sm shadow-md dark:bg-gray-900/78`}
+            className={`mt-4 grid h-16 w-full ${grid} rounded-xl bg-gray-50/85 text-sm shadow-md dark:bg-gray-900/85`}
           >
             <div className="col-start-1 col-span-1 flex-center space-x-2">
               <FaShieldAlt size={24} />
@@ -133,7 +133,7 @@ const NoInternetPage = () => {
         backgroundImage: `url(${dark ? wallpapers.night : wallpapers.day})`
       }}
     >
-      <div className="flex-center h-full w-full bg-gray-100/80 pb-10 text-center text-gray-600 backdrop-blur-2xl dark:bg-gray-800/80 dark:text-gray-500">
+      <div className="flex-center h-full w-full bg-gray-100/85 pb-10 text-center text-gray-600 backdrop-blur-3xl dark:bg-gray-800/85 dark:text-gray-500">
         <div className="pb-10 text-center">
           <div className="text-2xl font-bold">
             You Are Not Connected to the Internet

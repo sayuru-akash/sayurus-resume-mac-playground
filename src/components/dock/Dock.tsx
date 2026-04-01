@@ -40,7 +40,7 @@ export default function Dock({
       } overflow-x-scroll sm:overflow-x-visible`}
     >
       <ul
-        className="mx-auto flex w-max space-x-2 rounded-none border border-b-0 border-gray-400/30 bg-white/20 px-2 backdrop-blur-2xl sm:rounded-t-lg dark:border-gray-500/30 dark:bg-black/20"
+        className="mx-auto flex w-max space-x-2 rounded-none border border-b-0 border-gray-400/20 bg-white/15 px-2 backdrop-blur-3xl sm:rounded-t-xl dark:border-gray-500/20 dark:bg-black/15"
         onMouseMove={(e) => mouseX.set(e.nativeEvent.x)}
         onMouseLeave={() => mouseX.set(null)}
         style={{

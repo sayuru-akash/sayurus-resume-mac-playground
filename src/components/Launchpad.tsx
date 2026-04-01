@@ -39,9 +39,9 @@ export default function Launchpad({ show, toggleLaunchpad }: LaunchpadProps) {
       }}
       onClick={() => toggleLaunchpad(false)}
     >
-      <div className="absolute h-full w-full bg-gray-900/20 backdrop-blur-2xl">
+      <div className="absolute h-full w-full bg-gray-900/30 backdrop-blur-3xl">
         <div
-          className="mx-auto mt-5 grid h-7 w-64 grid-cols-11 rounded-md border border-gray-200/30 bg-gray-200/10"
+          className="mx-auto mt-5 grid h-7 w-64 grid-cols-11 rounded-lg border border-gray-200/30 bg-white/10 backdrop-blur-md"
           onClick={(e) => e.stopPropagation()}
         >
           <div className="col-start-1 col-span-1 flex-center">
