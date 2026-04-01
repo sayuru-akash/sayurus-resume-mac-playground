@@ -30,8 +30,7 @@ const FaceTime = () => {
           />
         )}
         <button
-          className="text-black mx-auto no-outline bg-white h-6 w-20"
-          border="1 black opacity-50 rounded-full"
+          className="text-black mx-auto no-outline bg-white h-6 w-20 rounded-full border border-black/20"
           onClick={() => setClick(false)}
         >
           <b>Retake</b>
@@ -59,8 +58,7 @@ const FaceTime = () => {
           videoConstraints={videoConstraints}
         />
         <button
-          className="mx-auto no-outline bg-white h-12 w-12"
-          border="1 black opacity-50 rounded-full"
+          className="mx-auto no-outline bg-white h-12 w-12 rounded-full border border-black/20 hover:bg-gray-50 transition-colors"
           onClick={() => {
             setClick(true);
             capture();

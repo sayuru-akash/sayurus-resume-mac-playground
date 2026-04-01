@@ -99,7 +99,7 @@ export default function DockItem({
       onClick={desktop || id === "launchpad" ? () => openApp(id) : () => {}}
       className="flex-center-v flex-col justify-end mb-1 transition duration-150 ease-in origin-bottom"
     >
-      <p className="tooltip absolute px-3 py-1 rounded-md text-sm bg-gray-300 opacity-80 dark:bg-gray-600 dark:opacity-80">
+      <p className="tooltip absolute px-3 py-1 rounded-lg text-sm bg-gray-800/90 text-white dark:bg-gray-900/90 backdrop-blur-md">
         {title}
       </p>
       {link ? (
@@ -126,9 +126,9 @@ export default function DockItem({
         />
       )}
       <div
-        className={`h-1 w-1 m-0 rounded-full bg-gray-800 dark:bg-gray-100 ${
+        className={`h-1.5 w-1.5 m-0 rounded-full bg-blue-500 dark:bg-blue-400 ${
           isOpen ? "" : "invisible"
-        }`}
+        } transition-all duration-150`}
       />
     </li>
   );
