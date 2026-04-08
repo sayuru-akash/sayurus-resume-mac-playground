@@ -60,7 +60,7 @@
 }
 
 .bear .markdown p {
-  @apply mt-6;
+  @apply mt-6 leading-relaxed break-words;
 }
 
 .bear .markdown h2 + p,
@@ -91,11 +91,11 @@
 }
 
 .bear .markdown code {
-  @apply text-sm border border-gray-300 rounded py-0.5 px-1 bg-gray-50;
+  @apply text-sm border border-gray-300 rounded py-0.5 px-1 bg-gray-50 break-words;
 }
 
 .bear .markdown pre {
-  @apply mt-2 text-sm;
+  @apply mt-2 text-sm overflow-x-auto;
 }
 
 .bear .markdown pre code {
@@ -111,7 +111,7 @@
 }
 
 .bear .markdown img {
-  @apply inline-block;
+  @apply inline-block max-w-full h-auto;
 }
 
 .bear .markdown table {
