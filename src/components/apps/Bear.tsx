@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import gfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
@@ -131,6 +131,41 @@ const getContentBaseURL = (url: string) => {
   return fileIdx === -1 ? url : url.slice(0, fileIdx + 1);
 };
 
+const normalizeGitHubContentURL = (url: string): string => {
+  try {
+    const parsedURL = new URL(url);
+
+    if (parsedURL.hostname === "raw.githubusercontent.com") {
+      return parsedURL.toString();
+    }
+
+    if (parsedURL.hostname !== "github.com") {
+      return url;
+    }
+
+    const [owner, repo, mode, ref, ...filePath] = parsedURL.pathname
+      .split("/")
+      .filter(Boolean);
+
+    if (
+      !owner ||
+      !repo ||
+      !ref ||
+      filePath.length === 0 ||
+      (mode !== "blob" && mode !== "raw")
+    ) {
+      return url;
+    }
+
+    return new URL(
+      `/${owner}/${repo}/${ref}/${filePath.join("/")}`,
+      "https://raw.githubusercontent.com"
+    ).toString();
+  } catch {
+    return url;
+  }
+};
+
 const normalizeMarkdown = (text: string): string => {
   return text
     .replace(/&nbsp;/g, " ")
@@ -164,13 +199,14 @@ const Content = ({ contentID, contentURL }: ContentProps) => {
   const [storeMd, setStoreMd] = useState<{ [key: string]: string }>({});
   const [loading, setLoading] = useState<{ [key: string]: boolean }>({});
   const dark = useAppSelector((state) => state.system.dark);
+  const normalizedContentURL = normalizeGitHubContentURL(contentURL);
 
   useEffect(() => {
     // Only fetch if we don't have the content and we're not already loading it
     if (!storeMd[contentID] && !loading[contentID]) {
       setLoading((prev) => ({ ...prev, [contentID]: true }));
 
-      fetch(contentURL)
+      fetch(normalizedContentURL)
         .then((response) => {
           if (!response.ok) {
             throw new Error(
@@ -190,12 +226,12 @@ const Content = ({ contentID, contentURL }: ContentProps) => {
           console.error(`Error fetching markdown for ${contentID}:`, error);
           setStoreMd((prev) => ({
             ...prev,
-            [contentID]: `# Error Loading Content\n\nFailed to load content from: ${contentURL}\n\nError: ${error.message}`
+            [contentID]: `# Error Loading Content\n\nFailed to load content from: ${contentURL}\n\nResolved request URL: ${normalizedContentURL}\n\nError: ${error.message}`
           }));
           setLoading((prev) => ({ ...prev, [contentID]: false }));
         });
     }
-  }, [contentID, contentURL, storeMd, loading]);
+  }, [contentID, contentURL, loading, normalizedContentURL, storeMd]);
 
   return (
     <div className="markdown w-full h-full bg-gray-50 text-gray-700 dark:(bg-gray-800 text-gray-200) overflow-scroll py-6">
@@ -209,7 +245,9 @@ const Content = ({ contentID, contentURL }: ContentProps) => {
         ) : (
           <ReactMarkdown
             remarkPlugins={[gfm]}
-            urlTransform={(url) => resolveMarkdownURL(url, contentURL)}
+            urlTransform={(url) =>
+              resolveMarkdownURL(url, normalizedContentURL)
+            }
             components={{
               a: ({ ...props }) => (
                 <a {...props} target="_blank" rel="noreferrer" />
