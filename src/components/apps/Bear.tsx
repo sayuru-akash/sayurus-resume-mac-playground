@@ -162,44 +162,64 @@ const resolveMarkdownURL = (url: string, contentURL: string): string => {
 
 const Content = ({ contentID, contentURL }: ContentProps) => {
   const [storeMd, setStoreMd] = useState<{ [key: string]: string }>({});
+  const [loading, setLoading] = useState<{ [key: string]: boolean }>({});
   const dark = useAppSelector((state) => state.system.dark);
 
-  const fetchMarkdown = useCallback(
-    (id: string, url: string) => {
-      if (!storeMd[id]) {
-        fetch(url)
-          .then((response) => response.text())
-          .then((text) => {
-            setStoreMd((prev) => ({
-              ...prev,
-              [id]: normalizeMarkdown(text)
-            }));
-          })
-          .catch((error) => console.error(error));
-      }
-    },
-    [storeMd]
-  );
-
   useEffect(() => {
-    fetchMarkdown(contentID, contentURL);
-  }, [contentID, contentURL, fetchMarkdown]);
+    // Only fetch if we don't have the content and we're not already loading it
+    if (!storeMd[contentID] && !loading[contentID]) {
+      setLoading((prev) => ({ ...prev, [contentID]: true }));
+
+      fetch(contentURL)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(
+              `Failed to fetch markdown: ${response.status} ${response.statusText}`
+            );
+          }
+          return response.text();
+        })
+        .then((text) => {
+          setStoreMd((prev) => ({
+            ...prev,
+            [contentID]: normalizeMarkdown(text)
+          }));
+          setLoading((prev) => ({ ...prev, [contentID]: false }));
+        })
+        .catch((error) => {
+          console.error(`Error fetching markdown for ${contentID}:`, error);
+          setStoreMd((prev) => ({
+            ...prev,
+            [contentID]: `# Error Loading Content\n\nFailed to load content from: ${contentURL}\n\nError: ${error.message}`
+          }));
+          setLoading((prev) => ({ ...prev, [contentID]: false }));
+        });
+    }
+  }, [contentID, contentURL, storeMd, loading]);
 
   return (
     <div className="markdown w-full h-full bg-gray-50 text-gray-700 dark:(bg-gray-800 text-gray-200) overflow-scroll py-6">
       <div className="w-full max-w-4xl px-6 mx-auto">
-        <ReactMarkdown
-          remarkPlugins={[gfm]}
-          urlTransform={(url) => resolveMarkdownURL(url, contentURL)}
-          components={{
-            a: ({ ...props }) => (
-              <a {...props} target="_blank" rel="noreferrer" />
-            ),
-            ...Highlighter(dark as boolean)
-          }}
-        >
-          {storeMd[contentID]}
-        </ReactMarkdown>
+        {loading[contentID] ? (
+          <div className="flex items-center justify-center h-64">
+            <div className="text-gray-500 dark:text-gray-400">
+              Loading content...
+            </div>
+          </div>
+        ) : (
+          <ReactMarkdown
+            remarkPlugins={[gfm]}
+            urlTransform={(url) => resolveMarkdownURL(url, contentURL)}
+            components={{
+              a: ({ ...props }) => (
+                <a {...props} target="_blank" rel="noreferrer" />
+              ),
+              ...Highlighter(dark as boolean)
+            }}
+          >
+            {storeMd[contentID] || ""}
+          </ReactMarkdown>
+        )}
       </div>
     </div>
   );
