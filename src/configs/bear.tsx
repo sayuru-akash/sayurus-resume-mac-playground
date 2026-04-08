@@ -52,84 +52,86 @@ const bear: BearData[] = [
     icon: <GoRepo />,
     md: [
       {
-        id: "certificate-verifier",
-        title: "Certificate Verification System",
-        file: "https://raw.githubusercontent.com/sayuru-akash/laravel-certificate-verifier/main/README.md",
+        id: "cca-lms",
+        title: "CCA LMS",
+        file: "https://github.com/sayuru-akash/cca-lms/raw/HEAD/README.md",
         icon: <RiGamepadLine />,
-        excerpt: "Certificate authenticity validation using Laravel...",
-        link: "https://github.com/sayuru-akash/laravel-certificate-verifier"
+        excerpt:
+          "Enterprise-grade LMS with terminal aesthetic using Next.js...",
+        link: "https://github.com/sayuru-akash/cca-lms"
       },
       {
-        id: "roborabbits",
-        title: "NFT Landing Website",
-        file: "https://raw.githubusercontent.com/sayuru-akash/nft-landing-page-roborabbits/main/README.md",
+        id: "bioswarm-engine",
+        title: "BioSwarm Engine",
+        file: "https://github.com/sayuru-akash/bioswarm-engine/raw/HEAD/README.md",
         icon: <HiFire />,
-        excerpt: "An NFT Landing page developed using HTML,CSS,JS...",
-        link: "https://github.com/sayuru-akash/nft-landing-page-roborabbits/"
+        excerpt: "14-agent multi-source intelligence swarm built in Rust...",
+        link: "https://github.com/sayuru-akash/bioswarm-engine"
       },
       {
-        id: "airline-reservation",
-        title: "Airline Reservation System",
-        file: "https://raw.githubusercontent.com/sayuru-akash/airline-reservation-system/master/README.md",
+        id: "bookmepro",
+        title: "BookMePro Latest",
+        file: "https://github.com/sayuru-akash/bookmepro-latest/raw/HEAD/README.md",
         icon: <FaVuejs />,
-        excerpt: "Airline seat reservation system developed using C#...",
-        link: "https://github.com/sayuru-akash/airline-reservation-system"
+        excerpt: "Scheduling and booking platform for coaches using Next.js...",
+        link: "https://github.com/sayuru-akash/bookmepro-latest"
       },
       {
-        id: "hotel-reservation",
-        title: "Hotel Reservation Website",
-        file: "https://raw.githubusercontent.com/sayuru-akash/hotel-reservation-system/main/README.md",
+        id: "wp-seo-blog-automater",
+        title: "WP SEO Blog Automater Plugin",
+        file: "https://github.com/sayuru-akash/wp-seo-blog-automater-plugin/raw/HEAD/README.md",
         icon: <GiEnergySword />,
-        excerpt: "A simple hotel reservation web application using JSP...",
-        link: "https://github.com/sayuru-akash/hotel-reservation-system"
+        excerpt: "WordPress plugin to automate SEO-focused blog generation...",
+        link: "https://github.com/sayuru-akash/wp-seo-blog-automater-plugin"
       },
       {
-        id: "music-notation-recogntion",
-        title: "Music Recognition Website",
-        file: "https://raw.githubusercontent.com/sayuru-akash/music-notation-recognizer/main/README.md",
+        id: "personal-brand-website",
+        title: "Personal Brand Website",
+        file: "https://github.com/sayuru-akash/personal-brand-website/raw/HEAD/README.md",
         icon: <RiNewspaperFill />,
-        excerpt: "Music notation recognition system using Python, OpenCV...",
-        link: "https://github.com/sayuru-akash/music-notation-recognizer"
+        excerpt:
+          "SEO-oriented personal branding website built with TypeScript...",
+        link: "https://github.com/sayuru-akash/personal-brand-website"
       },
       {
-        id: "sign-language-recogntion",
-        title: "Hand Sign Recognition Website",
-        file: "https://raw.githubusercontent.com/sayuru-akash/sign-language-recognizer/main/README.md",
-        icon: <RiNewspaperFill />,
-        excerpt: "Music notation recognition system using Python, OpenCV...",
-        link: "https://github.com/sayuru-akash/sign-language-recognizer"
-      },
-      {
-        id: "yshopping",
-        title: "Android Shopping App",
-        file: "https://raw.githubusercontent.com/sayuru-akash/yshopping-android-application/main/README.md",
+        id: "priyanvada-ai",
+        title: "Priyanvada AI",
+        file: "https://github.com/sayuru-akash/priyanvada-ai/raw/HEAD/README.md",
         icon: <GiJumpingDog />,
-        excerpt: "Android shopping application developed using Kotlin...",
-        link: "https://github.com/sayuru-akash/yshopping-android-application"
+        excerpt: "Character-based AI chat platform with modern architecture...",
+        link: "https://github.com/sayuru-akash/priyanvada-ai"
       },
       {
-        id: "accident-tracker",
-        title: "Accident Tracking Website",
-        file: "https://raw.githubusercontent.com/sayuru-akash/accident-tracking-website/main/README.md",
+        id: "sms-sender-textware",
+        title: "SMS Sender TextWare",
+        file: "https://github.com/sayuru-akash/sms-sender-python-textware/raw/HEAD/README.md",
         icon: <CgFormatText />,
-        excerpt: "Accident and insurance management web application...",
-        link: "https://github.com/sayuru-akash/accident-tracking-website"
+        excerpt: "Bulk SMS sender with rate limiting, logging and reporting...",
+        link: "https://github.com/sayuru-akash/sms-sender-python-textware"
       },
       {
-        id: "codeigniter-lms",
-        title: "Codeigniter LMS",
-        file: "https://raw.githubusercontent.com/sayuru-akash/main/README.md",
+        id: "sparks-blog",
+        title: "Sparks Blog",
+        file: "https://github.com/sayuru-akash/sparks-blog/raw/HEAD/README.md",
         icon: <AiFillAudio />,
-        excerpt: "Speech emotion recognition using Keras and sklearn...",
-        link: "https://saumikasenanayake.lk"
+        excerpt: "Ghost CMS-powered tech news and case-study blog frontend...",
+        link: "https://github.com/sayuru-akash/sparks-blog"
       },
       {
-        id: "wordpress-lms",
-        title: "WordPress LMS",
-        file: "https://raw.githubusercontent.com/sayuru-akash/main/README.md",
+        id: "image-gen-codezela",
+        title: "Image Gen Codezela",
+        file: "https://github.com/sayuru-akash/image-gen-codezela/raw/HEAD/README.md",
         icon: <BiGame />,
-        excerpt: "An interactable version of my resume, powered by Vue...",
-        link: "https://smartitacademy.lk/"
+        excerpt: "Modern AI creativity suite focused on image generation...",
+        link: "https://github.com/sayuru-akash/image-gen-codezela"
+      },
+      {
+        id: "cubebycodezela",
+        title: "CubeByCodezela",
+        file: "https://github.com/sayuru-akash/CubeByCodezela/raw/HEAD/README.md",
+        icon: <BiCube />,
+        excerpt: "Modern product landing page with polished visual design...",
+        link: "https://github.com/sayuru-akash/CubeByCodezela"
       }
     ]
   }
