@@ -126,30 +126,38 @@ const Middlebar = ({ items, cur, setContent }: MiddlebarProps) => {
   );
 };
 
-const getRepoURL = (url: string) => {
-  return url.slice(0, -10) + "/";
+const getContentBaseURL = (url: string) => {
+  const fileIdx = url.lastIndexOf("/");
+  return fileIdx === -1 ? url : url.slice(0, fileIdx + 1);
 };
 
-const fixImageURL = (text: string, contentURL: string): string => {
-  text = text.replace(/&nbsp;/g, "");
-  if (contentURL.indexOf("raw.githubusercontent.com") !== -1) {
-    const repoURL = getRepoURL(contentURL);
+const normalizeMarkdown = (text: string): string => {
+  return text
+    .replace(/&nbsp;/g, " ")
+    .replace(/<br\s*\/?>/gi, "\n")
+    .replace(/<\/(p|div|li|h1|h2|h3|h4|h5|h6)>/gi, "$&\n")
+    .replace(/<[^>]+>/g, "");
+};
 
-    const imgReg = /!\[(.*?)\]\((.*?)\)/;
-    const imgRegGlobal = /!\[(.*?)\]\((.*?)\)/g;
-
-    const imgList = text.match(imgRegGlobal);
-
-    if (imgList) {
-      for (const img of imgList) {
-        const imgURL = (img.match(imgReg) as Array<string>)[2];
-        if (imgURL.indexOf("http") !== -1) continue;
-        const newImgURL = repoURL + imgURL;
-        text = text.replace(imgURL, newImgURL);
-      }
-    }
+const resolveMarkdownURL = (url: string, contentURL: string): string => {
+  if (
+    !url ||
+    url.indexOf("http://") === 0 ||
+    url.indexOf("https://") === 0 ||
+    url.indexOf("mailto:") === 0 ||
+    url.indexOf("tel:") === 0 ||
+    url.indexOf("data:") === 0 ||
+    url.indexOf("//") === 0 ||
+    url.indexOf("#") === 0
+  ) {
+    return url;
   }
-  return text;
+
+  if (contentURL.indexOf("raw.githubusercontent.com") !== -1) {
+    return new URL(url, getContentBaseURL(contentURL)).toString();
+  }
+
+  return url;
 };
 
 const Content = ({ contentID, contentURL }: ContentProps) => {
@@ -162,8 +170,10 @@ const Content = ({ contentID, contentURL }: ContentProps) => {
         fetch(url)
           .then((response) => response.text())
           .then((text) => {
-            storeMd[id] = fixImageURL(text, url);
-            setStoreMd({ ...storeMd });
+            setStoreMd((prev) => ({
+              ...prev,
+              [id]: normalizeMarkdown(text)
+            }));
           })
           .catch((error) => console.error(error));
       }
@@ -177,9 +187,10 @@ const Content = ({ contentID, contentURL }: ContentProps) => {
 
   return (
     <div className="markdown w-full h-full bg-gray-50 text-gray-700 dark:(bg-gray-800 text-gray-200) overflow-scroll py-6">
-      <div className="w-2/3 px-2 mx-auto">
+      <div className="w-full max-w-4xl px-6 mx-auto">
         <ReactMarkdown
           remarkPlugins={[gfm]}
+          urlTransform={(url) => resolveMarkdownURL(url, contentURL)}
           components={{
             a: ({ ...props }) => (
               <a {...props} target="_blank" rel="noreferrer" />
