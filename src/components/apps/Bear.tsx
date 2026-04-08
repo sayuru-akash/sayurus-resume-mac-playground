@@ -153,10 +153,7 @@ const resolveMarkdownURL = (url: string, contentURL: string): string => {
     return url;
   }
 
-  if (
-    contentURL.indexOf("http://") === 0 ||
-    contentURL.indexOf("https://") === 0
-  ) {
+  if (contentURL.indexOf("raw.githubusercontent.com") !== -1) {
     return new URL(url, getContentBaseURL(contentURL)).toString();
   }
 
