@@ -32,6 +32,9 @@ interface BearState extends ContentProps {
   midbarList: BearMdData[];
 }
 
+type MarkdownCache = Record<string, string>;
+type LoadingCache = Record<string, boolean>;
+
 const Highlighter = (dark: boolean): any => {
   interface codeProps {
     node: any;
@@ -131,6 +134,21 @@ const getContentBaseURL = (url: string) => {
   return fileIdx === -1 ? url : url.slice(0, fileIdx + 1);
 };
 
+const isAbsoluteURL = (url: string): boolean => {
+  return /^[a-z][a-z\d+\-.]*:/i.test(url) || url.indexOf("//") === 0;
+};
+
+const getBasePublicURL = (): string => {
+  return import.meta.env.BASE_URL.endsWith("/")
+    ? import.meta.env.BASE_URL
+    : `${import.meta.env.BASE_URL}/`;
+};
+
+const resolvePublicContentURL = (url: string): string => {
+  const publicPath = url.replace(/^\/+/, "");
+  return `${getBasePublicURL()}${publicPath}`;
+};
+
 const normalizeGitHubContentURL = (url: string): string => {
   try {
     const parsedURL = new URL(url);
@@ -143,19 +161,20 @@ const normalizeGitHubContentURL = (url: string): string => {
       return url;
     }
 
-    const [owner, repo, mode, ref, ...filePath] = parsedURL.pathname
+    const [owner, repo, mode, ...rawPath] = parsedURL.pathname
       .split("/")
       .filter(Boolean);
 
     if (
       !owner ||
       !repo ||
-      !ref ||
-      filePath.length === 0 ||
+      rawPath.length < 2 ||
       (mode !== "blob" && mode !== "raw")
     ) {
       return url;
     }
+
+    const [ref, ...filePath] = rawPath;
 
     return new URL(
       `/${owner}/${repo}/${ref}/${filePath.join("/")}`,
@@ -166,6 +185,20 @@ const normalizeGitHubContentURL = (url: string): string => {
   }
 };
 
+const normalizeContentURL = (url: string): string => {
+  const githubURL = normalizeGitHubContentURL(url);
+
+  if (githubURL !== url || isAbsoluteURL(githubURL)) {
+    return githubURL;
+  }
+
+  if (githubURL.indexOf("#") === 0) {
+    return githubURL;
+  }
+
+  return resolvePublicContentURL(githubURL);
+};
+
 const normalizeMarkdown = (text: string): string => {
   return text
     .replace(/&nbsp;/g, " ")
@@ -174,69 +207,88 @@ const normalizeMarkdown = (text: string): string => {
     .replace(/<[^>]+>/g, "");
 };
 
+const getErrorMessage = (error: unknown): string => {
+  return error instanceof Error ? error.message : "Unknown error";
+};
+
 const resolveMarkdownURL = (url: string, contentURL: string): string => {
-  if (
-    !url ||
-    url.indexOf("http://") === 0 ||
-    url.indexOf("https://") === 0 ||
-    url.indexOf("mailto:") === 0 ||
-    url.indexOf("tel:") === 0 ||
-    url.indexOf("data:") === 0 ||
-    url.indexOf("//") === 0 ||
-    url.indexOf("#") === 0
-  ) {
+  if (!url || isAbsoluteURL(url) || url.indexOf("#") === 0) {
     return url;
   }
 
-  if (contentURL.indexOf("raw.githubusercontent.com") !== -1) {
-    return new URL(url, getContentBaseURL(contentURL)).toString();
+  if (
+    contentURL.includes("raw.githubusercontent.com") ||
+    contentURL.indexOf("/") === 0
+  ) {
+    const absoluteContentURL = new URL(
+      contentURL,
+      window.location.origin
+    ).toString();
+    return new URL(url, getContentBaseURL(absoluteContentURL)).toString();
   }
 
   return url;
 };
 
 const Content = ({ contentID, contentURL }: ContentProps) => {
-  const [storeMd, setStoreMd] = useState<{ [key: string]: string }>({});
-  const [loading, setLoading] = useState<{ [key: string]: boolean }>({});
+  const [storeMd, setStoreMd] = useState<MarkdownCache>({});
+  const [loading, setLoading] = useState<LoadingCache>({});
   const dark = useAppSelector((state) => state.system.dark);
-  const normalizedContentURL = normalizeGitHubContentURL(contentURL);
+  const normalizedContentURL = normalizeContentURL(contentURL);
+  const contentKey = `${contentID}:${normalizedContentURL}`;
+  const markdown = storeMd[contentKey];
+  const isLoading = Boolean(loading[contentKey]);
 
   useEffect(() => {
-    // Only fetch if we don't have the content and we're not already loading it
-    if (!storeMd[contentID] && !loading[contentID]) {
-      setLoading((prev) => ({ ...prev, [contentID]: true }));
-
-      fetch(normalizedContentURL)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(
-              `Failed to fetch markdown: ${response.status} ${response.statusText}`
-            );
-          }
-          return response.text();
-        })
-        .then((text) => {
-          setStoreMd((prev) => ({
-            ...prev,
-            [contentID]: normalizeMarkdown(text)
-          }));
-          setLoading((prev) => ({ ...prev, [contentID]: false }));
-        })
-        .catch((error) => {
-          console.error(`Error fetching markdown for ${contentID}:`, error);
-          setStoreMd((prev) => ({
-            ...prev,
-            [contentID]: `# Error Loading Content\n\nFailed to load content from: ${contentURL}\n\nResolved request URL: ${normalizedContentURL}\n\nError: ${error.message}`
-          }));
-          setLoading((prev) => ({ ...prev, [contentID]: false }));
-        });
+    if (markdown) {
+      return;
     }
-  }, [contentID, contentURL, loading, normalizedContentURL, storeMd]);
+
+    const abortController = new AbortController();
+
+    setLoading((prev) => ({ ...prev, [contentKey]: true }));
+
+    fetch(normalizedContentURL, { signal: abortController.signal })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(
+            `Failed to fetch markdown: ${response.status} ${response.statusText}`
+          );
+        }
+        return response.text();
+      })
+      .then((text) => {
+        setStoreMd((prev) => ({
+          ...prev,
+          [contentKey]: normalizeMarkdown(text)
+        }));
+      })
+      .catch((error: unknown) => {
+        if (error instanceof Error && error.name === "AbortError") {
+          return;
+        }
+
+        console.error(`Error fetching markdown for ${contentID}:`, error);
+        setStoreMd((prev) => ({
+          ...prev,
+          [contentKey]: `# Error Loading Content\n\nFailed to load content from: ${contentURL}\n\nResolved request URL: ${normalizedContentURL}\n\nError: ${getErrorMessage(error)}`
+        }));
+      })
+      .finally(() => {
+        if (!abortController.signal.aborted) {
+          setLoading((prev) => ({ ...prev, [contentKey]: false }));
+        }
+      });
+
+    return () => {
+      abortController.abort();
+    };
+  }, [contentID, contentKey, contentURL, markdown, normalizedContentURL]);
 
   return (
     <div className="markdown w-full h-full bg-gray-50 text-gray-700 dark:(bg-gray-800 text-gray-200) overflow-scroll py-6">
       <div className="w-full max-w-4xl px-6 mx-auto">
-        {loading[contentID] ? (
+        {isLoading ? (
           <div className="flex items-center justify-center h-64">
             <div className="text-gray-500 dark:text-gray-400">
               Loading content...
@@ -255,7 +307,7 @@ const Content = ({ contentID, contentURL }: ContentProps) => {
               ...Highlighter(dark as boolean)
             }}
           >
-            {storeMd[contentID] || ""}
+            {markdown || ""}
           </ReactMarkdown>
         )}
       </div>

@@ -87,7 +87,7 @@ const bear: BearData[] = [
       {
         id: "personal-brand-website",
         title: "Personal Brand Website",
-        file: "https://github.com/sayuru-akash/personal-brand-website/raw/HEAD/README.md",
+        file: "markdown/projects/personal-brand-website.md",
         icon: <RiNewspaperFill />,
         excerpt:
           "SEO-oriented personal branding website built with TypeScript...",
